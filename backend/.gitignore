@@ -1,0 +1,7 @@
+# ignorar dependencias
+node_modules/
+# ignorar archivos de entorno
+.env
+# ignorar archivos ddel sistema
+.DS_store
+thumbs.db
