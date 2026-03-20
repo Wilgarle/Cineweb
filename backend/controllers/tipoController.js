@@ -30,14 +30,13 @@ const getTipoById = async (req = request, res = response) => {
 // Crear un nuevo tipo
 const createTipo = async (req = request, res = response) => {
     try {
-        const { nombre } = req.body;
-        // Verificar si el tipo ya existe
-        const tipoDB = await Tipo.findOne({ nombre });
-        if (tipoDB) {
-            return res.status(400).json({ msg: `El tipo ${nombre} ya existe` });
+        const { nombre, descripcion } = req.body;
+        if (!nombre) {
+            return res.status(400).json({ msg: 'El campo "nombre" es obligatorio' });
         }
 
-        const tipo = new Tipo(req.body);
+        // No verificar duplicados: se permite crear tipos con mismo nombre (p. ej. Película/Serie)
+        const tipo = new Tipo({ nombre, descripcion });
         await tipo.save();
         res.status(201).json(tipo);
 
