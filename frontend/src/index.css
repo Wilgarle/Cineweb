@@ -1,0 +1,231 @@
+/* ============================================
+   CineWeb Admin — Estilos Globales
+   
+   Paleta profesional:
+   - Fondo general:    #f0f2f5 (gris muy suave)
+   - Contenedores:     #ffffff (blanco)
+   - Primario:         #2c3e50 (azul oscuro slate)
+   - Acento:           #3498db (azul)
+   - Acento hover:     #2980b9
+   - Éxito:            #27ae60
+   - Peligro:          #e74c3c
+   - Texto principal:  #2c3e50
+   - Texto secundario: #6c757d
+   - Borde suave:      #dee2e6
+   ============================================ */
+
+/* --- Importar fuente profesional --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- Base --- */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+}
+
+/* --- Navbar --- */
+.navbar-custom {
+    background-color: #1a252f;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0.6rem 0;
+}
+
+.navbar-custom .navbar-brand {
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    color: #ecf0f1 !important;
+}
+
+.navbar-custom .nav-link {
+    color: #bdc3c7 !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar-custom .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ecf0f1 !important;
+}
+
+.navbar-custom .nav-link.active {
+    background-color: rgba(52, 152, 219, 0.2);
+    color: #3498db !important;
+}
+
+/* --- Cards contenedoras --- */
+.card-section {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 1.75rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    margin-bottom: 1.5rem;
+}
+
+/* --- Títulos de página --- */
+.page-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+/* --- Tablas --- */
+.table thead th {
+    background-color: #2c3e50;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+.table tbody td {
+    vertical-align: middle;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+    color: #34495e;
+    border-bottom: 1px solid #eef0f2;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fb;
+}
+
+/* --- Badges de estado --- */
+.badge-estado {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.35em 0.75em;
+    border-radius: 20px;
+}
+
+.badge-activo {
+    background-color: #27ae60;
+    color: #fff;
+}
+
+.badge-inactivo {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+/* --- Botones --- */
+.btn {
+    font-weight: 500;
+    font-size: 0.875rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.btn-action {
+    margin-right: 6px;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.8rem;
+}
+
+.btn-create {
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+}
+
+/* --- Formularios --- */
+.form-section {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+}
+
+.form-control,
+.form-select {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+/* --- Loader --- */
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 0;
+}
+
+/* --- Home cards --- */
+.home-card {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.home-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.home-card .card-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #2c3e50;
+}
+
+.home-card .card-text {
+    color: #6c757d;
+    font-size: 0.88rem;
+}
+
+/* --- Mensajes vacíos --- */
+.empty-message {
+    background-color: #f8f9fa;
+    border: 1px dashed #ced4da;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+/* --- Container principal --- */
+.main-container {
+    max-width: 1140px;
+    padding: 1.5rem 1rem;
+}
