@@ -31,7 +31,7 @@ const TipoForm = () => {
             });
         } catch (error) {
             showError('No se pudo cargar el tipo');
-            navigate('/tipos');
+            navigate('/admin/tipos');
         } finally {
             setLoading(false);
         }
@@ -52,7 +52,7 @@ const TipoForm = () => {
                 await tipoService.create(form);
                 showSuccess('Tipo creado correctamente');
             }
-            navigate('/tipos');
+            navigate('/admin/tipos');
         } catch (error) {
             const mensaje = error.response?.data?.msg || 'Ocurrió un error';
             showError(mensaje);
@@ -95,7 +95,7 @@ const TipoForm = () => {
                     <button
                         type="button"
                         className="btn btn-outline-secondary"
-                        onClick={() => navigate('/tipos')}
+                        onClick={() => navigate('/admin/tipos')}
                     >
                         Cancelar
                     </button>

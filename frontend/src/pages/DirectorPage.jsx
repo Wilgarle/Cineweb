@@ -45,7 +45,7 @@ const DirectorPage = () => {
         <div className="card-section">
             <div className="page-header">
                 <h2 className="page-title">Directores</h2>
-                <Link to="/directores/nuevo" className="btn btn-primary btn-create">
+                <Link to="/admin/directores/nuevo" className="btn btn-primary btn-create">
                     + Nuevo Director
                 </Link>
             </div>
@@ -73,7 +73,7 @@ const DirectorPage = () => {
                                     </td>
                                     <td>
                                         <Link
-                                            to={`/directores/editar/${director._id}`}
+                                            to={`/admin/directores/editar/${director._id}`}
                                             className="btn btn-outline-warning btn-sm btn-action"
                                         >
                                             Editar

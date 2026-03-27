@@ -45,7 +45,7 @@ const ProductoraPage = () => {
         <div className="card-section">
             <div className="page-header">
                 <h2 className="page-title">Productoras</h2>
-                <Link to="/productoras/nuevo" className="btn btn-primary btn-create">
+                <Link to="/admin/productoras/nuevo" className="btn btn-primary btn-create">
                     + Nueva Productora
                 </Link>
             </div>
@@ -77,7 +77,7 @@ const ProductoraPage = () => {
                                     <td>{productora.descripcion || '—'}</td>
                                     <td>
                                         <Link
-                                            to={`/productoras/editar/${productora._id}`}
+                                            to={`/admin/productoras/editar/${productora._id}`}
                                             className="btn btn-outline-warning btn-sm btn-action"
                                         >
                                             Editar

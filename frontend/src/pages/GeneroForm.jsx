@@ -33,7 +33,7 @@ const GeneroForm = () => {
             });
         } catch (error) {
             showError('No se pudo cargar el género');
-            navigate('/generos');
+            navigate('/admin/generos');
         } finally {
             setLoading(false);
         }
@@ -54,7 +54,7 @@ const GeneroForm = () => {
                 await generoService.create(form);
                 showSuccess('Género creado correctamente');
             }
-            navigate('/generos');
+            navigate('/admin/generos');
         } catch (error) {
             const mensaje = error.response?.data?.msg || 'Ocurrió un error';
             showError(mensaje);
@@ -110,7 +110,7 @@ const GeneroForm = () => {
                     <button
                         type="button"
                         className="btn btn-outline-secondary"
-                        onClick={() => navigate('/generos')}
+                        onClick={() => navigate('/admin/generos')}
                     >
                         Cancelar
                     </button>

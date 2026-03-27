@@ -20,6 +20,23 @@ CineWeb es una aplicación web fullstack que permite gestionar un catálogo de p
 
 El objetivo es ofrecer a docentes, estudiantes, colaboradores y público en general una plataforma tipo streaming donde puedan ver contenido multimedia de forma gratuita.
 
+### 📸 Capturas de Pantalla (Módulos Visuales)
+
+**Visión Pública (Home Page)**  
+<div align="center">
+  <img src="docs/images/home_page.png" alt="Visión Pública Home Page" width="800">
+</div>
+
+**Catálogo de Contenido Interactivo**  
+<div align="center">
+  <img src="docs/images/catalogo.png" alt="Vista de Catálogo de Películas Scifi" width="800">
+</div>
+
+**Dashboard Administrativo (Seguro)**  
+<div align="center">
+  <img src="docs/images/admin_panel.png" alt="Panel de Administración / CRUD Integrado" width="800">
+</div>
+
 ---
 
 ## Tecnologías
@@ -35,6 +52,9 @@ El objetivo es ofrecer a docentes, estudiantes, colaboradores y público en gene
 | **dotenv** | 17.x | Variables de entorno |
 | **cors** | 2.x | Middleware para Cross-Origin Requests |
 | **nodemon** | 3.x | Recarga automática en desarrollo |
+| **Bcrypt & JWT** | v9 / 18 | Autenticación y cifrado de secretos |
+| **Helmet** | 8.x | Seguridad en Headers HTTP |
+| **Rate Limit** | 7.x | Protección DDoS y contra fuerza bruta |
 
 ### Frontend
 
@@ -74,6 +94,13 @@ Cineweb/
 │   │   └── mediaRoutes.js
 │   ├── db/
 │   │   └── db-connection-mongo.js
+│   ├── helpers/
+│   │   └── generarSerial.js
+│   ├── middlewares/
+│   │   └── upload.js
+│   ├── scripts/
+│   │   └── migrarSeriales.js
+│   ├── uploads/
 │   ├── .env
 │   ├── index.js
 │   └── package.json
@@ -170,10 +197,21 @@ El frontend se ejecutará en `http://localhost:5000`
 
 ---
 
+## 🔒 Auditoría de Seguridad & Robustez
+
+El proyecto transcurrió por una fase de corrección exhaustiva aplicándose mitigaciones severas para poder ser desplegados de manera pública. Actualmente cuenta con:
+1. **Autenticación (JWT Bearer):** Restricción de operaciones de lectura/escritura (CRUD) únicamente para cuentas autenticadas con rol `admin`.
+2. **Body & Payload Sanitization:** Exclusión activa de caracteres maliciosos (`$` y `.`) previniendo *NoSQL Injection*.
+3. **Control de Flujo (Rate Limiting):** Todo acceso a `/api/auth` está protegido contra ataques de fuerza bruta (Límite 10/15min).
+4. **Mass Assignment Prevention:** Reestructuración de controladores backend para filtrar y admitir exclusivamente las propiedades válidas de cada objeto validado.
+5. **Esquemas Estrictos:** Limites en metadatos de inputs (`maxlength`) y protección directa contra vulnerabilidad de visualización accidental de contraseñas filtradas en la Base de Datos (`select: false`).
+
+---
+
 ## Arquitectura
 
 ```
-┌──────────────────┐         ┌──────────────────┐         ┌──────────────┐
+┌──────────────────┐         ┌──────────────────┐          ┌──────────────┐
 │                  │  HTTP   │                  │ Mongoose │              │
 │  Frontend React  │ ──────► │  Backend Express │ ───────► │  MongoDB     │
 │  (Puerto 5000)   │  Axios  │  (Puerto 4000)   │          │  Atlas       │
@@ -182,6 +220,42 @@ El frontend se ejecutará en `http://localhost:5000`
 ```
 
 El frontend se comunica con el backend a través de **Axios**, apuntando a `http://localhost:4000/api`. Esta URL base se configura en `frontend/src/services/api.js`.
+
+---
+
+## 🛑 Reglas Claves y Obligatorias
+
+**Reglas Claves:**
+- El **backend** no debe contener código de interfaz.
+- El **frontend** no debe contener lógica de base de datos.
+- La comunicación entre capas se realiza **exclusivamente mediante API REST**.
+
+**Reglas Obligatorias:**
+- **No mezclar** rutas con lógica de negocio.
+- **No definir** modelos dentro de controladores.
+- **No realizar** consultas a BD directamente en rutas.
+- **No centralizar** todo en un solo archivo.
+
+---
+
+## 📝 Convenciones de Nomenclatura
+
+Para asegurar la legibilidad del código por humanos y la consistencia en la generación por IA:
+
+### Reglas de Uso de Casos
+- `camelCase` (ej. `miVariable`): Obligatorio para variables, nombres de funciones y métodos en JS/NodeJS.
+- `PascalCase` (ej. `MiClase`): Obligatorio para nombres de clases, componentes de React y modelos de Mongoose.
+- `UPPER_SNAKE_CASE` (ej. `MI_CONSTANTE`): Para valores constantes globales que nunca cambian.
+- `kebab-case` (ej. `mi-archivo.js`): Preferido para nombres de archivos de componentes o rutas en el frontend.
+
+### Reglas Semánticas y Sintácticas
+1. **Nombres Descriptivos:** Evitar nombres genéricos como 'data' o 'handle'. Usar verbos para funciones (ej. `calculateTaxReturn` en lugar de `calc`).
+2. **Booleanos:** Deben usar prefijos de pregunta (`isActive`, `hasToken`, `canWrite`).
+3. **Sufijos de Responsabilidad (Backend):** Los nombres de archivos deben revelar su rol en la arquitectura (ej. `productController.js`, `authService.js`).
+4. **Singular vs Plural:**
+   - **Singular (PascalCase):** Para Clases y Modelos (ej. `class User`, `class Product`). Representan un molde individual.
+   - **Singular (camelCase):** Para instancias únicas de un objeto (ej. `const user = await User.findById(id)`).
+   - **Plural (camelCase):** Para colecciones, Arrays o listas de elementos (ej. `const users = await User.find()`).
 
 ---
 
@@ -248,11 +322,11 @@ Gestiona las producciones (películas y series). Referencia a los demás módulo
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `serial` | String | Identificador único de la producción |
+| `serial` | String | **Generado automáticamente** (`PEL-0001` o `SER-0001`) — Inmutable |
 | `titulo` | String | Título de la producción (obligatorio) |
 | `sinopsis` | String | Sinopsis de la producción |
 | `url` | String | URL de reproducción (única, obligatoria) |
-| `imagen` | String | URL de la imagen de portada |
+| `imagen` | String | Imagen de portada (subida local vía Multer) |
 | `anioEstreno` | Number | Año de estreno (obligatorio) |
 | `genero` | ObjectId → Genero | Género principal (solo activos) |
 | `director` | ObjectId → Director | Director principal (solo activos) |
@@ -262,6 +336,12 @@ Gestiona las producciones (películas y series). Referencia a los demás módulo
 | `fechaActualizacion` | Date | Automática |
 
 > **Regla de negocio:** Al crear o actualizar una media, el sistema valida que el género, director y productora se encuentren en estado **Activo**.
+
+> **Serial automático:** El sistema genera el serial basándose en el tipo seleccionado:
+> - `Película` → `PEL-0001`, `PEL-0002`, ...
+> - `Serie` → `SER-0001`, `SER-0002`, ...
+>
+> El usuario **no** ingresa este dato. Es inmutable una vez creado.
 
 ---
 
@@ -322,14 +402,14 @@ La URL base (`http://localhost:4000/api`) se configura en `services/api.js`.
 
 ## Frontend — Diseño Visual
 
-El frontend utiliza un diseño profesional con las siguientes características:
+El frontend integró visuales premium, optando por una atmósfera inmersiva cinematográfica enfocada en dar al usuario una experiencia High-End:
 
-- **Fuente:** Inter (Google Fonts)
-- **Paleta:** Azul oscuro slate (#2c3e50) como primario, azul (#3498db) como acento
-- **Tablas:** Headers oscuros, hover suave, badges de estado con colores semánticos
-- **Formularios:** Cards blancas centradas, inputs con focus azul, botones consistentes
-- **Alertas:** SweetAlert2 para confirmaciones de eliminación y mensajes de éxito/error
-- **Responsive:** Bootstrap con tablas responsive y layout adaptable
+- **Fuente:** Inter (Google Fonts) para lograr legibilidad y limpieza a la vez.
+- **Paleta Neón Oscura:** Integración de un Dark Mode unificado (Acesos Azules al rededor del fondo índigo profundo `#040441cb`) logrando el impacto de un "Home Theater".
+- **Glassmorphism:** Uso intensivo de transparencias UI mediante `backdrop-filter: blur`, acentuando paneles que reflejan suavemente el contenido inferior (Navbars y Forms).
+- **Acciones UI Modernas:** Los botones que eran "flat" tradicionales pasaron a formato *Pill-Shaped* con animaciones fluidas, contornos y _box-shadow_ marcados.
+- **Alertas:** SweetAlert2 integrando confirmaciones y errores.
+- **Responsive:** Layout avanzado combinando Flexbox/CSS Grid; re-diseñando de forma elegante la interactividad de las tablas y perfiles.
 
 ---
 

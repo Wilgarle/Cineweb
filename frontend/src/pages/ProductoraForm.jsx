@@ -35,7 +35,7 @@ const ProductoraForm = () => {
             });
         } catch (error) {
             showError('No se pudo cargar la productora');
-            navigate('/productoras');
+            navigate('/admin/productoras');
         } finally {
             setLoading(false);
         }
@@ -56,7 +56,7 @@ const ProductoraForm = () => {
                 await productoraService.create(form);
                 showSuccess('Productora creada correctamente');
             }
-            navigate('/productoras');
+            navigate('/admin/productoras');
         } catch (error) {
             const mensaje = error.response?.data?.msg || 'Ocurrió un error';
             showError(mensaje);
@@ -125,7 +125,7 @@ const ProductoraForm = () => {
                     <button
                         type="button"
                         className="btn btn-outline-secondary"
-                        onClick={() => navigate('/productoras')}
+                        onClick={() => navigate('/admin/productoras')}
                     >
                         Cancelar
                     </button>

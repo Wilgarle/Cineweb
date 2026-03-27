@@ -45,7 +45,7 @@ const GeneroPage = () => {
         <div className="card-section">
             <div className="page-header">
                 <h2 className="page-title">Géneros</h2>
-                <Link to="/generos/nuevo" className="btn btn-primary btn-create">
+                <Link to="/admin/generos/nuevo" className="btn btn-primary btn-create">
                     + Nuevo Género
                 </Link>
             </div>
@@ -75,7 +75,7 @@ const GeneroPage = () => {
                                     <td>{genero.descripcion || '—'}</td>
                                     <td>
                                         <Link
-                                            to={`/generos/editar/${genero._id}`}
+                                            to={`/admin/generos/editar/${genero._id}`}
                                             className="btn btn-outline-warning btn-sm btn-action"
                                         >
                                             Editar

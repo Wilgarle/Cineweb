@@ -45,7 +45,7 @@ const MediaPage = () => {
         <div className="card-section">
             <div className="page-header">
                 <h2 className="page-title">Media</h2>
-                <Link to="/media/nuevo" className="btn btn-primary btn-create">
+                <Link to="/admin/media/nuevo" className="btn btn-primary btn-create">
                     + Nueva Media
                 </Link>
             </div>
@@ -79,7 +79,7 @@ const MediaPage = () => {
                                     <td>{media.tipo?.nombre || '—'}</td>
                                     <td>
                                         <Link
-                                            to={`/media/editar/${media._id}`}
+                                            to={`/admin/media/editar/${media._id}`}
                                             className="btn btn-outline-warning btn-sm btn-action"
                                         >
                                             Editar

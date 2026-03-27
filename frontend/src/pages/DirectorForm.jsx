@@ -31,7 +31,7 @@ const DirectorForm = () => {
             });
         } catch (error) {
             showError('No se pudo cargar el director');
-            navigate('/directores');
+            navigate('/admin/directores');
         } finally {
             setLoading(false);
         }
@@ -52,7 +52,7 @@ const DirectorForm = () => {
                 await directorService.create(form);
                 showSuccess('Director creado correctamente');
             }
-            navigate('/directores');
+            navigate('/admin/directores');
         } catch (error) {
             const mensaje = error.response?.data?.msg || 'Ocurrió un error';
             showError(mensaje);
@@ -97,7 +97,7 @@ const DirectorForm = () => {
                     <button
                         type="button"
                         className="btn btn-outline-secondary"
-                        onClick={() => navigate('/directores')}
+                        onClick={() => navigate('/admin/directores')}
                     >
                         Cancelar
                     </button>

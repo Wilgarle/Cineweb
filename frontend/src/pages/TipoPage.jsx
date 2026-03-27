@@ -45,7 +45,7 @@ const TipoPage = () => {
         <div className="card-section">
             <div className="page-header">
                 <h2 className="page-title">Tipos</h2>
-                <Link to="/tipos/nuevo" className="btn btn-primary btn-create">
+                <Link to="/admin/tipos/nuevo" className="btn btn-primary btn-create">
                     + Nuevo Tipo
                 </Link>
             </div>
@@ -69,7 +69,7 @@ const TipoPage = () => {
                                     <td>{tipo.descripcion || '—'}</td>
                                     <td>
                                         <Link
-                                            to={`/tipos/editar/${tipo._id}`}
+                                            to={`/admin/tipos/editar/${tipo._id}`}
                                             className="btn btn-outline-warning btn-sm btn-action"
                                         >
                                             Editar
