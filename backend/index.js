@@ -23,9 +23,10 @@ app.use(helmet({
 // 2. CORS — Restringir orígenes permitidos
 const corsOptions = {
     origin: [
-        'http://localhost:5000',   // Frontend en desarrollo
-        'http://localhost:5173',   // Vite default port
-        'http://localhost:3000'    // Alternativo
+        'https://cineweb-sooty.vercel.app', // Tu dominio en Vercel 
+        'https://cineweb-pqwq.onrender.com', // Tu dominio en Vercel
+        'http://localhost:5000',           // Frontend en desarrollo
+        'http://localhost:5173'            // Vite default port
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -57,6 +58,15 @@ const authLimiter = rateLimit({
 // Servir la carpeta de uploads de manera estática
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Ruta de Bienvenida (Health Check)
+app.get('/', (req, res) => {
+    res.json({
+        msg: 'CineWeb API - Funcionando Correctamente 🚀',
+        version: '1.0.0',
+        author: 'Wilgar'
+    });
+});
+
 // ============================================
 // RUTAS
 // ============================================
@@ -75,13 +85,22 @@ app.use('/api/media', require('./routes/mediaRoutes'));
 // MIDDLEWARE GLOBAL DE ERRORES
 // ============================================
 app.use((err, req, res, next) => {
-    console.error('Error no capturado:', err.message);
-    res.status(500).json({ msg: 'Error interno del servidor' });
+    console.error('⚠️ Error no capturado:', err.message);
+    // Combinamos msg y error para que se vea en cualquier frontend
+    res.status(500).json({
+        msg: `Error interno del servidor: ${err.message}`,
+        error: err.message
+    });
 });
 
 getConnection();
 
+// Exportar la app para Vercel (indispensable para Serverless)
+module.exports = app;
+
+// Mantener el servidor encendido (Indispensable para Render y Local)
 app.listen(port, () => {
     console.log(`--- 🟢 Servidor corriendo en el puerto ${port} ---`);
     console.log(`--- 🔒 Seguridad activada: Helmet, CORS, Sanitize, RateLimit ---`);
 });
+

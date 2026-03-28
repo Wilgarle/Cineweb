@@ -1,44 +1,41 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Crear el directorio si no existe
-const uploadDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Configuración de almacenamiento
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        // Renombrar archivo para evitar colisiones: timestamp-nombreOriginal
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
+// Configuración de Cloudinary — Usando variables de entorno configuradas previamente
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Filtro de archivos para aceptar solo imágenes png/jpg/jpeg
-const fileFilter = (req, file, cb) => {
-    const fileTypes = /jpeg|jpg|png/;
-    // Validar extensión
-    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-    // Validar mimetype
-    const mimetype = fileTypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-        return cb(null, true);
-    } else {
-        cb(new Error('Solo se permiten imágenes en formato PNG o JPG/JPEG.'));
+// Configuración de almacenamiento en la Nube (Cloudinary)
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'cineweb_uploads', // Carpeta donde se guardarán las fotos en Cloudinary
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'gif', 'avif'], // Formatos permitidos
+    public_id: (req, file) => {
+      // Renombrar archivo en la nube: timestamp_nombreOriginal
+      const name = file.originalname.split('.')[0];
+      return `${Date.now()}_${name}`;
     }
+  }
+});
+
+// Filtro de seguridad adicional para tipos de archivo
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Solo se permiten archivos de imagen (png, jpg, jpeg, webp, gif, avif).'), false);
+  }
 };
 
 const upload = multer({
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // Limitar a 5MB
-    fileFilter: fileFilter
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 } // Límite de 5MB por foto
 });
 
 module.exports = upload;

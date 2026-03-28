@@ -197,7 +197,10 @@ const MediaForm = () => {
             }
             navigate('/admin/media');
         } catch (error) {
-            const mensaje = error.response?.data?.msg || 'Ocurrió un error';
+            const data = error.response?.data;
+            const mensaje = data?.error 
+                ? `${data.msg}: ${data.error}` 
+                : (data?.msg || 'Ocurrió un error al guardar');
             showError(mensaje);
         }
     };

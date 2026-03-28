@@ -87,11 +87,10 @@ const createMedia = async (req = request, res = response) => {
         // Generar serial automático basado en el tipo (PEL-XXXX o SER-XXXX)
         const serialGenerado = await generarSerial(tipo);
 
-        // Construir la URL completa de la imagen si se subió un archivo
+        // Obtener la URL de la imagen de Cloudinary si se subió un archivo
         let imagenUrl = req.body.imagen || '';
         if (req.file) {
-            const domain = `${req.protocol}://${req.get('host')}`;
-            imagenUrl = `${domain}/uploads/${req.file.filename}`;
+            imagenUrl = req.file.path;
         }
 
         // Solo campos permitidos (previene mass assignment)
@@ -113,8 +112,11 @@ const createMedia = async (req = request, res = response) => {
         res.status(201).json(media);
 
     } catch (error) {
-        console.error('Error al crear la media:', error);
-        res.status(500).json({ msg: 'Ocurrió un error al crear la media' });
+        console.error('❌ Error al crear la media:', error);
+        res.status(500).json({ 
+            msg: 'Ocurrió un error al crear la media',
+            error: error.message // Debug: Mostrar el error real
+        });
     }
 };
 
@@ -174,11 +176,10 @@ const updateMedia = async (req = request, res = response) => {
             media.tipo = tipo;
         }
 
-        // Construir la URL completa de la imagen si se subío un archivo
+        // Obtener la URL de la imagen de Cloudinary si se subió un archivo
         let imagenUrl = imagen || media.imagen;
         if (req.file) {
-            const domain = `${req.protocol}://${req.get('host')}`;
-            imagenUrl = `${domain}/uploads/${req.file.filename}`;
+            imagenUrl = req.file.path;
         }
 
         // Serial es inmutable — no se actualiza una vez generado
@@ -192,8 +193,11 @@ const updateMedia = async (req = request, res = response) => {
         const mediaActualizada = await media.save();
         res.status(200).json(mediaActualizada);
     } catch (error) {
-        console.error('Error al actualizar la media:', error);
-        res.status(500).json({ msg: 'Ocurrió un error al actualizar la media' });
+        console.error('❌ Error al actualizar la media:', error);
+        res.status(500).json({ 
+            msg: 'Ocurrió un error al actualizar la media',
+            error: error.message // Debug: Mostrar el error real
+        });
     }
 };
 
